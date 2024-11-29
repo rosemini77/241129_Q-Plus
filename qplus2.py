@@ -107,7 +107,7 @@ def authenticate_user(email, password):
     try:
         # 비밀번호를 Firebase Authentication에서 검증하려면 클라이언트 SDK 사용이 필요하지만,
         # 여기서는 이메일과 비밀번호가 하드코딩된 예시입니다.
-        if email == "dawon2024" and password == "dawon2024":
+        if email.strip() == "dawon2024" and password.strip() == "dawon2024":
             return True
         else:
             return False
@@ -123,7 +123,7 @@ def main():
         st.session_state.logged_in = False
 
     if not st.session_state.logged_in:
-        email = st.text_input("이메일")
+        email = st.text_input("아이디")
         password = st.text_input("비밀번호", type="password")
         
         if st.button("로그인"):
@@ -131,7 +131,7 @@ def main():
                 st.session_state.logged_in = True
                 st.success("로그인 성공!")
             else:
-                st.error("이메일 또는 비밀번호가 잘못되었습니다.")
+                st.error("아이디 또는 비밀번호가 잘못되었습니다.")
         return
 
     # 로그인 후 PDF 파일 업로드 기능
