@@ -130,10 +130,9 @@ def main():
             if authenticate_user(email, password):
                 # 로그인 성공 시 로그인 상태 갱신
                 st.session_state.logged_in = True
-                st.success("로그인 성공! 로그인 후 질문을 할 수 있습니다.")
-                with st.spinner("질문 창으로 넘어가는 중..."):
+                with st.spinner("로그인 중..."):
                     st.session_state.logged_in = True  # 로그인 상태 갱신
-                    st.experimental_rerun()  # 페이지 새로고침으로 다음 화면으로 넘어감
+                    st.rerun()  # 페이지 새로고침으로 다음 화면으로 넘어감
             else:
                 st.error("아이디 또는 비밀번호가 잘못되었습니다.")
         return
