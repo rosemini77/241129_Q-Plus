@@ -7,7 +7,7 @@ from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 import streamlit as st
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, auth
 
 # Streamlit secrets에서 Firebase 인증 정보 읽어오기
 firebase_config = st.secrets["firebase"]
@@ -102,11 +102,42 @@ def create_qa_chain(vector_store):
     qa_chain = RetrievalQA.from_chain_type(llm, retriever=retriever)
     return qa_chain
 
+# 사용자 로그인 확인 함수
+def authenticate_user(email, password):
+    try:
+        user = auth.get_user_by_email(email)
+        # 비밀번호 검증을 위해 Firebase Authentication 클라이언트 SDK를 사용해야 하지만,
+        # Admin SDK에서는 비밀번호 확인을 직접적으로 할 수 없습니다. 따라서
+        # 별도의 인증 시스템을 구현하거나 클라이언트 SDK를 사용해야 합니다.
+        # 여기서는 "dawon2024"로 하드코딩된 예시입니다.
+        if email == "dawon2024" and password == "dawon2024":
+            return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
 # Streamlit 애플리케이션 메인 함수
 def main():
     st.title("PDF 질문 답변 챗봇")
 
-    # PDF 파일 업로드 기능
+    # 로그인 화면
+    if "logged_in" not in st.session_state:
+        st.session_state.logged_in = False
+
+    if not st.session_state.logged_in:
+        email = st.text_input("이메일", value="dawon2024")
+        password = st.text_input("비밀번호", type="password", value="dawon2024")
+        
+        if st.button("로그인"):
+            if authenticate_user(email, password):
+                st.session_state.logged_in = True
+                st.success("로그인 성공!")
+            else:
+                st.error("이메일 또는 비밀번호가 잘못되었습니다.")
+        return
+
+    # 로그인 후 PDF 파일 업로드 기능
     uploaded_files = st.file_uploader("PDF 파일을 업로드하세요", accept_multiple_files=True, type="pdf")
 
     if uploaded_files:
