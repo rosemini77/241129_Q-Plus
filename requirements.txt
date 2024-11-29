@@ -6,3 +6,6 @@ faiss-cpu
 langchain-community
 python-dotenv
 tiktoken
+firebase-admin  #
+pytz  #
+pycryptodome #
