@@ -123,13 +123,17 @@ def main():
         st.session_state.logged_in = False
 
     if not st.session_state.logged_in:
-        email = st.text_input("아이디")
+        email = st.text_input("아이디", value="dawon2024")
         password = st.text_input("비밀번호", type="password")
         
         if st.button("로그인"):
             if authenticate_user(email, password):
+                # 로그인 성공 시 로그인 상태 갱신
                 st.session_state.logged_in = True
-                st.success("로그인 성공!")
+                st.success("로그인 성공! 로그인 후 질문을 할 수 있습니다.")
+                with st.spinner("질문 창으로 넘어가는 중..."):
+                    st.session_state.logged_in = True  # 로그인 상태 갱신
+                    st.experimental_rerun()  # 페이지 새로고침으로 다음 화면으로 넘어감
             else:
                 st.error("아이디 또는 비밀번호가 잘못되었습니다.")
         return
@@ -154,7 +158,7 @@ def main():
         st.write("답변:", response)
 
         # Firestore 데이터를 활용해 관련 문서와 페이지 번호 출력
-        st.write("관련된 문서 및 페이지 번호:")
+        st.write("관련된 문서 및 페이지 번호: ")
         results = vector_store.similarity_search_with_score(query, k=3)  # 상위 3개의 관련 문서 검색
         for result in results:
             metadata = result[0].metadata  # 메타데이터 추출
