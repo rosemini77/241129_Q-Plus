@@ -127,7 +127,7 @@ def main():
 
     if not st.session_state.logged_in:
         email = st.text_input("이메일", value="dawon2024")
-        password = st.text_input("비밀번호", type="password", value="dawon2024")
+        password = st.text_input("비밀번호", type="password")
         
         if st.button("로그인"):
             if authenticate_user(email, password):
