@@ -105,11 +105,8 @@ def create_qa_chain(vector_store):
 # 사용자 로그인 확인 함수
 def authenticate_user(email, password):
     try:
-        user = auth.get_user_by_email(email)
-        # 비밀번호 검증을 위해 Firebase Authentication 클라이언트 SDK를 사용해야 하지만,
-        # Admin SDK에서는 비밀번호 확인을 직접적으로 할 수 없습니다. 따라서
-        # 별도의 인증 시스템을 구현하거나 클라이언트 SDK를 사용해야 합니다.
-        # 여기서는 "dawon2024"로 하드코딩된 예시입니다.
+        # 비밀번호를 Firebase Authentication에서 검증하려면 클라이언트 SDK 사용이 필요하지만,
+        # 여기서는 이메일과 비밀번호가 하드코딩된 예시입니다.
         if email == "dawon2024" and password == "dawon2024":
             return True
         else:
@@ -126,7 +123,7 @@ def main():
         st.session_state.logged_in = False
 
     if not st.session_state.logged_in:
-        email = st.text_input("이메일", value="dawon2024")
+        email = st.text_input("이메일")
         password = st.text_input("비밀번호", type="password")
         
         if st.button("로그인"):
